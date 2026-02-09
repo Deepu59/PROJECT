@@ -54,14 +54,14 @@ export default function Dashboard() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-50 p-6 text-slate-700 dark:bg-slate-950 dark:text-slate-200">
+      <div className="min-h-screen bg-sky-50 p-6 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
         Loading dashboard...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen bg-sky-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col md:flex-row">
         <Sidebar active={active} setActive={setActive} />
 
