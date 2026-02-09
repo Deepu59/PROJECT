@@ -32,7 +32,7 @@ export default function Home() {
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <button className="rounded-full bg-sky-600 px-7 py-3 text-sm font-semibold text-white hover:bg-sky-700">
-              Get started for free
+              Continue
             </button>
           </div>
         </div>
