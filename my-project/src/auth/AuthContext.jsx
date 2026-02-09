@@ -9,13 +9,13 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setLoading(false);
-    });
-    return () => unsub();
-  }, []);
+  const unsub = onAuthStateChanged(auth, (user) => {
+    setUser(user);
+    setLoading(false); // ← REQUIRED
+  });
 
+  return unsub;
+}, []);
   return (
     <AuthContext.Provider value={{ user, loading }}>
       {children}
