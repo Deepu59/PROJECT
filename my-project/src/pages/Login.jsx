@@ -6,10 +6,13 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
+  signInWithEmailAndPassword, // ✅ ADD
 } from "firebase/auth";
 
 function Label({ children }) {
-  return <div className="mb-2 text-sm font-semibold text-slate-800">{children}</div>;
+  return (
+    <div className="mb-2 text-sm font-semibold text-slate-800">{children}</div>
+  );
 }
 
 function TextInput({ className = "", ...props }) {
@@ -28,52 +31,45 @@ function TextInput({ className = "", ...props }) {
 export default function Login() {
   const navigate = useNavigate();
 
-  // (email/password part is still demo UI)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Auto redirect if already logged in with Firebase
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) navigate("/dashboard");
+      if (user) navigate("/dashboard", { replace: true });
     });
     return () => unsub();
   }, [navigate]);
 
-  function onSubmit(e) {
+  // ✅ Email/Password Firebase Login
+  async function onSubmit(e) {
     e.preventDefault();
-
-    // This is still frontend-only demo (NOT real auth)
-    localStorage.setItem("demo_user", JSON.stringify({ email, at: Date.now() }));
-
-    // After login -> dashboard
-    navigate("/dashboard");
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      console.error(err.code, err.message);
+      alert(err.code); // auth/user-not-found, auth/wrong-password, etc.
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function signInWithGoogle() {
     try {
+      setLoading(true);
       const provider = new GoogleAuthProvider();
-      const res = await signInWithPopup(auth, provider);
-
-      // optional: store user info locally
-      localStorage.setItem(
-        "demo_user",
-        JSON.stringify({
-          uid: res.user.uid,
-          email: res.user.email,
-          name: res.user.displayName,
-          photo: res.user.photoURL,
-          provider: "google",
-          at: Date.now(),
-        })
-      );
-
-      // After Google login -> dashboard
-      navigate("/dashboard");
+      await signInWithPopup(auth, provider);
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       console.error(err);
       alert(err?.message || "Google sign-in failed");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -89,7 +85,9 @@ export default function Login() {
             {/* LEFT: form */}
             <div className="p-8 sm:p-12">
               <h1 className="text-3xl font-extrabold text-slate-900">Login</h1>
-              <p className="mt-2 text-slate-500">Built for busy students like you.</p>
+              <p className="mt-2 text-slate-500">
+                Built for busy students like you.
+              </p>
 
               <form onSubmit={onSubmit} className="mt-10 space-y-6">
                 <div>
@@ -137,7 +135,10 @@ export default function Login() {
                   </div>
 
                   <div className="mt-3 text-center">
-                    <Link to="#" className="text-sm font-semibold text-sky-600 hover:underline">
+                    <Link
+                      to="#"
+                      className="text-sm font-semibold text-sky-600 hover:underline"
+                    >
                       Forgot password?
                     </Link>
                   </div>
@@ -145,10 +146,22 @@ export default function Login() {
 
                 <button
                   type="submit"
-                  className="w-full rounded-full bg-sky-600 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-700"
+                  disabled={loading}
+                  className="w-full rounded-full bg-sky-600 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-700 disabled:opacity-60"
                 >
-                  Continue
+                  {loading ? "Please wait..." : "Continue"}
                 </button>
+
+                {/* ✅ Signup link */}
+                <p className="text-center text-sm text-slate-600">
+                  Don’t have an account?{" "}
+                  <Link
+                    to="/signup"
+                    className="font-semibold text-sky-600 hover:underline"
+                  >
+                    Create new account
+                  </Link>
+                </p>
 
                 <div className="flex items-center gap-4 pt-1">
                   <div className="h-px flex-1 bg-slate-200" />
@@ -162,13 +175,26 @@ export default function Login() {
                     onClick={signInWithGoogle}
                     className="grid h-14 w-14 place-items-center rounded-2xl bg-white ring-1 ring-slate-200 hover:bg-slate-50"
                     aria-label="Sign in with Google"
+                    disabled={loading}
                   >
                     {/* Google icon */}
                     <svg width="22" height="22" viewBox="0 0 48 48">
-                      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.7 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.1-.1-2.3-.4-3.5z"/>
-                      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.7 6.1 29.6 4 24 4c-7.7 0-14.4 4.3-17.7 10.7z"/>
-                      <path fill="#4CAF50" d="M24 44c5.2 0 10-2 13.5-5.2l-6.2-5.2C29.3 36 26.8 37 24 37c-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.5 40 16.2 44 24 44z"/>
-                      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.1-2.2 3.9-4 5.1l6.2 5.2C40.9 35 44 29.9 44 24c0-1.1-.1-2.3-.4-3.5z"/>
+                      <path
+                        fill="#FFC107"
+                        d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.7 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.1-.1-2.3-.4-3.5z"
+                      />
+                      <path
+                        fill="#FF3D00"
+                        d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.7 6.1 29.6 4 24 4c-7.7 0-14.4 4.3-17.7 10.7z"
+                      />
+                      <path
+                        fill="#4CAF50"
+                        d="M24 44c5.2 0 10-2 13.5-5.2l-6.2-5.2C29.3 36 26.8 37 24 37c-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.5 40 16.2 44 24 44z"
+                      />
+                      <path
+                        fill="#1976D2"
+                        d="M43.6 20.5H42V20H24v8h11.3c-.8 2.1-2.2 3.9-4 5.1l6.2 5.2C40.9 35 44 29.9 44 24c0-1.1-.1-2.3-.4-3.5z"
+                      />
                     </svg>
                   </button>
 
@@ -177,10 +203,17 @@ export default function Login() {
                     onClick={signInWithApple}
                     className="grid h-14 w-14 place-items-center rounded-2xl bg-white ring-1 ring-slate-200 hover:bg-slate-50"
                     aria-label="Sign in with Apple"
+                    disabled={loading}
                   >
                     {/* Apple icon */}
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-slate-900">
-                      <path d="M16.365 1.43c0 1.14-.417 2.2-1.247 3.03-.83.83-2.024 1.31-3.12 1.22-.14-1.1.4-2.27 1.19-3.07.84-.85 2.16-1.36 3.18-1.18zM20.5 17.2c-.6 1.36-.88 1.97-1.66 3.17-1.1 1.67-2.66 3.75-4.59 3.77-1.71.02-2.15-1.12-4.48-1.11-2.33.01-2.81 1.13-4.52 1.11-1.93-.02-3.41-1.89-4.51-3.56C.2 18.64-.94 14.3 1.3 11.6c1.29-1.57 3.33-2.49 5.24-2.49 1.95 0 3.18 1.12 4.8 1.12 1.57 0 2.52-1.13 4.78-1.13 1.7 0 3.49.93 4.77 2.53-4.2 2.3-3.52 8.25.61 9.57z"/>
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="text-slate-900"
+                    >
+                      <path d="M16.365 1.43c0 1.14-.417 2.2-1.247 3.03-.83.83-2.024 1.31-3.12 1.22-.14-1.1.4-2.27 1.19-3.07.84-.85 2.16-1.36 3.18-1.18zM20.5 17.2c-.6 1.36-.88 1.97-1.66 3.17-1.1 1.67-2.66 3.75-4.59 3.77-1.71.02-2.15-1.12-4.48-1.11-2.33.01-2.81 1.13-4.52 1.11-1.93-.02-3.41-1.89-4.51-3.56C.2 18.64-.94 14.3 1.3 11.6c1.29-1.57 3.33-2.49 5.24-2.49 1.95 0 3.18 1.12 4.8 1.12 1.57 0 2.52-1.13 4.78-1.13 1.7 0 3.49.93 4.77 2.53-4.2 2.3-3.52 8.25.61 9.57z" />
                     </svg>
                   </button>
                 </div>
@@ -190,7 +223,9 @@ export default function Login() {
             {/* RIGHT: promo panel */}
             <div className="relative hidden lg:block">
               <div className="h-full w-full bg-gradient-to-br from-blue-700 via-sky-600 to-sky-400 p-12 text-white">
-                <div className="text-sm/6 text-white/85">Everything you need to stay on track.</div>
+                <div className="text-sm/6 text-white/85">
+                  Everything you need to stay on track.
+                </div>
 
                 <h2 className="mt-8 text-center text-4xl font-extrabold leading-tight">
                   Manage your classes, tasks, exams, and more. All in one place.

@@ -8,7 +8,7 @@ const SECTIONS = [
       {
         heading: "The dashboard.",
         body:
-          "Your dashboard lets you quickly see what’s next—classes, assignments, and upcoming events—so you always know where you need to be.",
+          "Your dashboard lets you quickly see what next—classes, assignments, and upcoming events—so you always know where you need to be.",
       },
       {
         heading: "All schedule types.",
@@ -29,12 +29,12 @@ const SECTIONS = [
       {
         heading: "Tasks, at a glance.",
         body:
-          "See your tasks clearly with status and progress. Know what’s due soon and what can wait.",
+          "See your tasks clearly with status and progress. Know whats due soon and what can wait.",
       },
       {
         heading: "Repeated tasks.",
         body:
-          "Set tasks to repeat automatically so you don’t have to add the same work again and again.",
+          "Set tasks to repeat automatically so you dont have to add the same work again and again.",
       },
     ],
   },
