@@ -27,7 +27,7 @@ export default function Sidebar({ active, setActive }) {
           className={`${itemBase} ${active === "timer" ? itemActive : itemInactive}`}
           onClick={() => setActive("timer")}
         >
-          Gym Timer
+         Timer
         </button>
 
         <button

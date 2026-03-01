@@ -37,7 +37,7 @@ export default function SiteNavbar() {
           <img
             src={logo}
             alt="MyStudyLife"
-            className="h-10 w-auto object-contain"
+            className="h-15 w-auto object-contain"
           />
         </NavLink>
 
