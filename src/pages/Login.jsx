@@ -6,7 +6,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
-  signInWithEmailAndPassword, // ✅ ADD
+  signInWithEmailAndPassword, 
 } from "firebase/auth";
 
 function Label({ children }) {
