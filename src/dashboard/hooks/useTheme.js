@@ -2,7 +2,8 @@ import { useEffect } from "react";
 
 export function useTheme(theme) {
   useEffect(() => {
-    const root = document.documentElement;
+    const root = window.document.documentElement;
+
     if (theme === "dark") {
       root.classList.add("dark");
     } else {

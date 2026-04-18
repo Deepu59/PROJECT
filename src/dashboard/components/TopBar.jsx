@@ -75,20 +75,9 @@ export default function TopBar({
           )}
 
           {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            className="
-              rounded-xl border border-slate-200
-              bg-white px-3 py-2 text-xs font-semibold
-              hover:bg-slate-100
-              dark:border-slate-700
-              dark:bg-slate-800
-              dark:text-slate-100
-              dark:hover:bg-slate-700
-            "
-          >
-            {theme === "dark" ? "Light" : "Dark"}
-          </button>
+          <button onClick={toggleTheme}>
+  {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+</button>
 
           {/* User */}
           <div className="ml-1 flex items-center gap-2">
