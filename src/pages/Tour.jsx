@@ -7,13 +7,11 @@ const SECTIONS = [
     blocks: [
       {
         heading: "The dashboard.",
-        body:
-          "Your dashboard lets you quickly see what next—classes, assignments, and upcoming events—so you always know where you need to be.",
+        body: "Your dashboard lets you quickly see what next—classes, assignments, and upcoming events—so you always know where you need to be.",
       },
       {
         heading: "All schedule types.",
-        body:
-          "Daily, weekly, and monthly views help you plan short-term and long-term. Add times, dates, and keep everything organized.",
+        body: "Daily, weekly, and monthly views help you plan short-term and long-term. Add times, dates, and keep everything organized.",
       },
     ],
   },
@@ -23,18 +21,15 @@ const SECTIONS = [
     blocks: [
       {
         heading: "Not just another to‑do list.",
-        body:
-          "Tasks are connected to your schedule. Track due dates and prioritize work without losing context.",
+        body: "Tasks are connected to your schedule. Track due dates and prioritize work without losing context.",
       },
       {
         heading: "Tasks, at a glance.",
-        body:
-          "See your tasks clearly with status and progress. Know whats due soon and what can wait.",
+        body: "See your tasks clearly with status and progress. Know whats due soon and what can wait.",
       },
       {
         heading: "Repeated tasks.",
-        body:
-          "Set tasks to repeat automatically so you dont have to add the same work again and again.",
+        body: "Set tasks to repeat automatically so you dont have to add the same work again and again.",
       },
     ],
   },
@@ -44,8 +39,7 @@ const SECTIONS = [
     blocks: [
       {
         heading: "Never forget a thing",
-        body:
-          "Enable reminders for classes, exams, and tasks. Get notified before something starts or before a deadline is due.",
+        body: "Enable reminders for classes, exams, and tasks. Get notified before something starts or before a deadline is due.",
       },
     ],
   },
@@ -58,7 +52,7 @@ function Sidebar({ activeId }) {
       { id: "tasks", label: "Tasks", icon: ListIcon },
       { id: "reminders", label: "Reminders", icon: ClockIcon },
     ],
-    []
+    [],
   );
 
   return (
@@ -84,7 +78,9 @@ function Sidebar({ activeId }) {
                 <div className="grid h-12 w-12 place-items-center rounded-xl bg-slate-50 text-slate-700">
                   <Icon />
                 </div>
-                <div className="text-xl font-semibold text-slate-700">{it.label}</div>
+                <div className="text-xl font-semibold text-slate-700">
+                  {it.label}
+                </div>
               </a>
             );
           })}
@@ -122,9 +118,7 @@ export default function Tour() {
   // Highlight active section while scrolling
   useEffect(() => {
     const ids = SECTIONS.map((s) => s.id);
-    const els = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
+    const els = ids.map((id) => document.getElementById(id)).filter(Boolean);
 
     if (!els.length) return;
 
@@ -133,14 +127,16 @@ export default function Tour() {
         // pick the most visible entry
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
+          .sort(
+            (a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0),
+          )[0];
         if (visible?.target?.id) setActiveId(visible.target.id);
       },
       {
         root: null,
         threshold: [0.2, 0.35, 0.5],
         rootMargin: "-20% 0px -65% 0px",
-      }
+      },
     );
 
     els.forEach((el) => obs.observe(el));
@@ -163,7 +159,9 @@ export default function Tour() {
         <div className="mx-auto max-w-6xl px-4 py-16">
           <h2 className="text-5xl font-extrabold leading-tight text-slate-800 md:text-6xl">
             <span className="text-slate-800">How to use our</span>{" "}
-            <span className="text-sky-700">daily school planner and schedule maker</span>
+            <span className="text-sky-700">
+              daily school planner and schedule maker
+            </span>
           </h2>
           <p className="mt-6 max-w-4xl text-lg text-slate-600">
             When is that exam? Do I have any homework? Use your schedule, tasks,
@@ -178,11 +176,7 @@ export default function Tour() {
 
         <div className="space-y-14">
           {SECTIONS.map((section) => (
-            <section
-              key={section.id}
-              id={section.id}
-              className="scroll-mt-28"
-            >
+            <section key={section.id} id={section.id} className="scroll-mt-28">
               <h2 className="text-5xl font-extrabold text-slate-800">
                 {section.title}
               </h2>
@@ -222,18 +216,33 @@ export default function Tour() {
   );
 }
 
-/* Simple icons */
 function BookIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" className="text-slate-700">
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="text-slate-700"
+    >
       <path d="M4 19a2 2 0 0 1 2-2h14" stroke="currentColor" strokeWidth="2" />
-      <path d="M6 17V5a2 2 0 0 1 2-2h12v14" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M6 17V5a2 2 0 0 1 2-2h12v14"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
     </svg>
   );
 }
 function ListIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" className="text-slate-700">
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="text-slate-700"
+    >
       <path d="M8 6h13M8 12h13M8 18h13" stroke="currentColor" strokeWidth="2" />
       <path d="M3 6h1M3 12h1M3 18h1" stroke="currentColor" strokeWidth="2" />
     </svg>
@@ -241,13 +250,24 @@ function ListIcon() {
 }
 function ClockIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" className="text-slate-700">
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="text-slate-700"
+    >
       <path
         d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"
         stroke="currentColor"
         strokeWidth="2"
       />
-      <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M12 6v6l4 2"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
